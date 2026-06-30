@@ -1,0 +1,30 @@
+{
+  "create_success": "پرداخت با موفقیت ایجاد شد.",
+  "update_success": "پرداخت با موفقیت به‌روزرسانی شد.",
+  "delete_success": "پرداخت با موفقیت حذف شد.",
+  "status_update_success": "وضعیت پرداخت با موفقیت تغییر کرد.",
+  "list_success": "لیست پرداخت‌ها با موفقیت دریافت شد.",
+  "global_list_success": "لیست پرداخت‌های سراسری با موفقیت دریافت شد.",
+  "detail_success": "جزئیات پرداخت با موفقیت دریافت شد.",
+  "code_exists": "این کد پرداخت تکراری است و در سامانه وجود دارد",
+  "create_error": "خطا در ایجاد درخواست پرداخت.",
+  "update_error": "خطا در به‌روزرسانی وضعیت پرداخت.",
+  "not_found": "پرداخت مورد نظر یافت نشد.",
+  "status_update_error": "خطا در تغییر وضعیت پرداخت.",
+  "delete_error": "خطا در حذف سوابق پرداخت.",
+  "invalid_tenant": "شناسه تننت نامعتبر است.",
+  "payment_failed": "پرداخت با خطا مواجه شد. لطفاً روش پرداخت را تغییر دهید.",
+  "transaction_timeout": "زمان انجام پرداخت به پایان رسید.",
+  "insufficient_stock": "محصول نا موجود است",
+  "already_refunded": "این پرداخت قبلاً بازگشت وجه (Refund) شده است.",
+  "notif": {
+    "success_title": "پرداخت موفق",
+    "success_message": "پرداخت سفارش {orderCode} با موفقیت انجام شد.",
+    "new_order_paid_title": "سفارش جدید",
+    "new_order_paid_message": "سفارش جدید با کد {orderCode} و با میلغ {amount} دریافت شد"
+  },
+  "sms": {
+    "success_message": "پرداخت سفارش {orderCode} با  مبلغ {amount} ریال با موفقیت انجام شد.",
+    "new_order_paid_sms": "سفارش جدید با کد {orderCode} دریافت شد"
+  }
+}

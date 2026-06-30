@@ -1,0 +1,79 @@
+{
+  "notif": {
+    "appointment_created": {
+      "customer": {
+        "title": "رزرو نوبت موفق",
+        "message": "نوبت شما برای {serviceType} با کد پیگیری {orderCode} با موفقیت ثبت شد. لطفاً در زمان مقرر با کد معاینه {examCode} به مطب {tenantName} مراجعه فرمایید.",
+        "sms": "پتومن: نوبت شما کد {orderCode} ثبت شد. مبلغ: {amount} ریال."
+      },
+      "clinic": {
+        "title": "نوبت جدید (رزرو شده)",
+        "message": "یک نوبت جدید (رزرو شده) ({serviceType}) به شماره {orderCode} در سامانه ثبت (پرداخت) شد.",
+        "sms": "نوبت جدید (رزرو شده): {orderCode} - نوع: {serviceType}. لطفاً پنل مدیریت خود را بررسی کنید."
+      }
+    },
+    "appointment_approved": {
+      "customer": {
+        "title": "نوبت شما تایید شد",
+        "message": "نوبت شما برای {serviceType} با کد پیگیری {orderCode} تایید شد. لطفاً در زمان مقرر آماده باشید.",
+        "sms": "پتومن: نوبت شما با کد {orderCode} تایید شد."
+      },
+      "clinic": {
+        "title": "نوبت تایید شد",
+        "message": "نوبت با کد {orderCode} برای سرویس {serviceType} تایید شد.",
+        "sms": "نوبت تایید شده: {orderCode} - نوع: {serviceType}"
+      }
+    },
+    "appointment_in_chat": {
+      "customer": {
+        "title": "شروع گفتگوی مشاوره",
+        "message": "گفتگوی مشاوره برای نوبت {orderCode} در کلینیک {tenantName} شروع شد.",
+        "sms": "گفتگوی نوبت {orderCode} شروع شد."
+      },
+      "clinic": {
+        "title": "شروع چت با بیمار",
+        "message": "بیمار مربوط به نوبت {orderCode} وارد چت شده است."
+      }
+    },
+    "appointment_in_progress": {
+      "customer": {
+        "title": "نوبت در حال انجام",
+        "message": "نوبت شما با کد پیگیری {orderCode} در حال انجام است.",
+        "sms": "پتومن: نوبت {orderCode} در حال انجام است."
+      },
+      "clinic": {
+        "title": "نوبت در حال انجام",
+        "message": "نوبت با کد {orderCode} در حال انجام است.",
+        "sms": "نوبت در حال انجام: {orderCode}"
+      }
+    },
+    "appointment_completed": {
+      "customer": {
+        "title": "نوبت تکمیل شد",
+        "message": "نوبت شما با کد پیگیری {orderCode} تکمیل شد. لطفاً نوبت را ارزیابی کنید.",
+        "sms": "پتومن: نوبت {orderCode} تکمیل شد."
+      },
+      "clinic": {
+        "title": "نوبت تکمیل شد",
+        "message": "نوبت با کد {orderCode} تکمیل شد.",
+        "sms": "نوبت تکمیل شده: {orderCode}"
+      }
+    },
+    "appointment_cancelled": {
+      "customer": {
+        "title": "نوبت شما لغو شد",
+        "message": "نوبت شما با کد پیگیری {orderCode} لغو شد. مبلغ {amount} ریال به کیف پول شما بازگشت.",
+        "sms": "پتومن: نوبت {orderCode} لغو شد. وجه عودت داده شد."
+      },
+      "clinic": {
+        "title": "نوبت لغو شد",
+        "message": "نوبت با کد {orderCode} لغو شد.",
+        "sms": "نوبت لغو شده: {orderCode}"
+      }
+    },
+    "service_types": {
+      "home": "ویزیت در منزل",
+      "clinic": "ویزیت کلینیک"
+    }
+  }
+}

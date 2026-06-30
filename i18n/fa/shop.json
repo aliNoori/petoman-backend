@@ -1,0 +1,61 @@
+{
+  "request": {
+    "can_not_setting_edit_approved": "تغییرات روی اطلاعات تایید شده امکان‌پذیر نیست. لطفاً ابتدا وضعیت را تغییر دهید.",
+    "created_success": "درخواست فروشگاه با موفقیت ثبت شد",
+    "creation_failed": "خطا در ثبت درخواست {type}",
+    "approve_success": "تبریک! درخواست ایجاد {type} شما تایید شد. می توانید وارد پنل مدیریت شوید.",
+    "reject_success": "متاسفیم! درخواست ایجاد {type} شما تایید نشد.",
+    "already_approved": "شما قبلاً درخواست فروشگاه داده‌اید که تایید شده است",
+    "already_pending": "شما یک درخواست در حال بررسی دارید. لطفاً صبر کنید",
+    "not_found": "فروشگاه مورد نظر یافت نشد",
+    "can_not_revision": "فروشگاه تایید شده و نمی توانید درخواست ویرایش دهید",
+    "revision_success": "درخواست ویرایش{type} با موفقیت ثبت شد",
+    "no_permission": "شما دسترسی لازم برای ویرایش این درخواست را ندارید",
+    "can_not_edit_approved": "این درخواست تایید شده است و امکان ویرایش وجود ندارد",
+    "update_success": "درخواست{type} با موفقیت ویرایش شد"
+  },
+  "notif": {
+    "already_approved_title": "شما قبلاً فروشگاه تایید شده دارید",
+    "already_approved_message": "شما قبلاً درخواست فروشگاه داده‌اید که تایید شده است. امکان ثبت درخواست جدید وجود ندارد.",
+    "already_pending_title": "درخواست شما در حال بررسی است",
+    "already_pending_message": "شما یک درخواست در حال بررسی دارید. لطفاً تا تکمیل فرآیند بررسی صبر کنید.",
+    "approve_setting_title": "تایید تغییرات",
+    "approve_setting_message": "درخواست تغییرات در تنظیمات فروشگاه شما تایید شد.",
+    "approve_title": "تایید درخواست {type}",
+    "approve_message": "تبریک! درخواست ایجاد {type} شما با کد {shopId} تایید شد. می‌توانید وارد پنل مدیریت شوید.",
+    "revision_title": "نیاز به ویرایش درخواست {type}",
+    "revision_message": "اطلاعات ارسالی شما نیاز به اصلاح دارد. لطفاً وارد پنل شده و اطلاعات درخواست {type} را ویرایش کنید.",
+    "reject_setting_title": "رد تغییرات",
+    "reject_setting_message": "متاسفانه درخواست تغییرات در تنظیمات فروشگاه شما رد شد.",
+    "reject_setting_message_with_reason": "متاسفانه درخواست تغییرات در تنظیمات فروشگاه شما رد شد. دلیل: {reason}",
+    "correction_setting_title": "نیاز به اصلاح اطلاعات",
+    "correction_setting_message": "درخواست تغییرات شما دارای ایراد است. لطفاً اطلاعات را اصلاح کنید.",
+    "correction_setting_message_with_reason": "درخواست تغییرات شما دارای ایراد است. دلیل: {reason}",
+    "reject_title": "درخواست فروشگاه رد شد",
+    "reject_message": "متاسفانه درخواست ایجاد {type} شما تایید نشد. دلیل رد درخواست: {reason}",
+    "create_title": "ثبت درخواست {type}",
+    "create_message": "درخواست ایجاد {type} شما با موفقیت ثبت شد و در انتظار بررسی است.",
+    "update_title": "ویرایش درخواست فروشگاه",
+    "update_message": "اطلاعات درخواست فروشگاه شما ویرایش شد و مجدداً به بررسی ارسال شد."
+  },
+  "sms": {
+    "approve_setting_message": "تغییرات تنظیمات فروشگاه شما تایید شد.",
+    "reject_setting_message": "متاسفانه درخواست تغییرات شما رد شد.",
+    "reject_setting_message_with_reason": "متاسفانه درخواست تغییرات شما رد شد. دلیل: {reason}",
+    "correction_setting_message": "لطفاً تغییرات درخواستی فروشگاه خود را اصلاح کنید.",
+    "correction_setting_message_with_reason": "لطفاً تغییرات درخواستی فروشگاه خود را اصلاح کنید. دلیل: {reason}"
+  },
+  "market": {
+    "settings_updated_successfully": "تنظیمات با موفقیت به‌روزرسانی شد.",
+    "logo_change_request_desc": "درخواست تغییر لوگوی فروشگاه",
+    "errors": {
+      "request_not_found": "درخواست مورد نظر یافت نشد."
+    },
+    "messages": {
+      "changes_approved": "تغییرات با موفقیت تایید شد.",
+      "changes_rejected": "تغییرات رد شد.",
+      "changes_correction_required": "درخواست اصلاح تغییرات ارسال شد.",
+      "operation_success": "عملیات با موفقیت انجام شد."
+    }
+  }
+}

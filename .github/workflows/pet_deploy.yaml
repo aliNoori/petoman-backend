@@ -1,0 +1,56 @@
+name: Petoman Deploy (Nest - Prebuilt)
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Stop NestJS service
+        run: |
+          sudo systemctl stop nest.service
+
+      - name: Sync code to server
+        run: |
+          sudo rsync -avz --delete --exclude='.git' --exclude='.env' ./ /var/www/api.petoman.com/pet
+          sudo chmod -R 770 /var/www/api.petoman.com/pet
+          sudo chown -R www-data:www-data /var/www/api.petoman.com/pet
+
+      - name: Install dependencies
+        run: |
+          cd /var/www/api.petoman.com/pet
+          npm install
+
+      - name: Build Nest app
+        run: |
+          cd /var/www/api.petoman.com/pet
+          npm run build
+
+      - name: Restart NestJS service
+        run: |
+          sudo systemctl restart nest.service
+
+      - name: Check application health
+        run: |
+          URL="https://api.petoman.com/api/health"
+          MAX_RETRIES=10
+          SLEEP_SEC=5
+          for i in $(seq 1 $MAX_RETRIES); do
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$URL" || echo "000")
+            if [[ "$STATUS" == "200" ]] || [[ "$STATUS" =~ ^3 ]]; then
+              echo "✅ Health check passed with status $STATUS"
+              exit 0
+            else
+              echo "⚠️ Attempt $i/$MAX_RETRIES - Status $STATUS, retrying in $SLEEP_SEC seconds..."
+              sleep $SLEEP_SEC
+            fi
+          done
+          echo "❌ Health check failed after $MAX_RETRIES attempts."
+          exit 1

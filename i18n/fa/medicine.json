@@ -1,0 +1,24 @@
+{
+  "create_success": "دارو با موفقیت ایجاد شد.",
+  "update_success": "دارو با موفقیت به‌روزرسانی شد.",
+  "delete_success": "دارو با موفقیت حذف شد.",
+  "approve_success": "دارو با موفقیت تایید شد.",
+  "reject_success": "دارو با موفقیت رد شد.",
+  "list_success": "لیست داروها با موفقیت دریافت شد.",
+  "detail_success": "جزئیات دارو با موفقیت دریافت شد.",
+  "code_exists": "کد این دارو تکراری است.",
+  "not_found": "داروی مورد نظر یافت نشد.",
+  "already_approved": "این دارو قبلاً تایید شده است.",
+  "tenant_required": "برای ایجاد دارو باید تنانت انتخاب شود.",
+  "attach_to_shop_success": "دارو با موفقیت به فروشگاه متصل شد.",
+  "notif": {
+    "reject_title": "درخواست ثبت دارو {name} رد شد",
+    "reject_message": "متاسفانه دارو {name}  تایید نشد. دلیل رد درخواست: {reason}",
+    "revision_title": "درخواست داروی {name} برای ویرایش ارسال شد",
+    "revision_message": "داروی {name}  تایید نشد و برای ویرایش ارسال شد. دلیل ویرایش درخواست: {reason}",
+    "success_title": "درخواست داروی {name} تایید شد",
+    "success_message": "درخواست داروی {name}  تایید شد.",
+    "remove_title": "حذف داروی {name}",
+    "remove_message": "دارو {name}  حذف شد"
+  }
+}
