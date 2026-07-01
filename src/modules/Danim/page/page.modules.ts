@@ -17,7 +17,7 @@ import { PageController} from "./page.controller";
         // ----------------------------------------------------
         MulterModule.register({
             storage: diskStorage({
-                destination: './public/uploads/pages',
+                destination: './uploads/pages',
                 filename: (req, file, callback) => {
                     const unique = Date.now() + '-' + Math.round(Math.random() * 1e9);
                     const ext = extname(file.originalname);
