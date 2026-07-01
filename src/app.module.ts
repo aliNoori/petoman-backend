@@ -196,17 +196,25 @@ import {ContractModule} from "./shared/contract/contract.module";
         // تنظیمات اتصال به ردیس
         BullModule.forRoot({
             redis: {
-                host: '127.0.0.1', // یا آدرس سرور ردیس شما
-                port: 6379,
+                // host: '127.0.0.1', // یا آدرس سرور ردیس شما
+                // port: 6379,
+                host: process.env.REDIS_HOST,
+                port: Number(process.env.REDIS_PORT),
             },
         }),
         TypeOrmModule.forRoot({
+            // type: 'postgres',
+            // host: 'localhost',
+            // port: 5432,
+            // username: 'postgres',
+            // password: 'ame@6558U',
+            // database: 'petoman',
             type: 'postgres',
-            host: 'localhost',
-            port: 5432,
-            username: 'postgres',
-            password: 'ame@6558U',
-            database: 'petoman',
+            host: process.env.DATABASE_HOST,
+            port: Number(process.env.DATABASE_PORT),
+            username: process.env.DATABASE_USER,
+            password: process.env.DATABASE_PASSWORD,
+            database: process.env.DATABASE_NAME,
             entities: [
                 User, Upload, UserAddress,
                 Message, Notification, OtpCode,
