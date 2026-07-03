@@ -110,12 +110,18 @@ import {ClinicService} from "../modules/vet&clinic/entities/clinic-service.entit
 import {TenantAddress} from "../core/entities/tenant-address.entity";
 
 export const AppDataSource = new DataSource({
+    // type: 'postgres',
+    // host: 'localhost',
+    // port: 5432,
+    // username: 'postgres',
+    // password: 'ame@6558U',
+    // database: 'petoman',
     type: 'postgres',
-    host: 'localhost',
-    port: 5432,
-    username: 'postgres',
-    password: 'ame@6558U',
-    database: 'petoman',
+    host: process.env.DATABASE_HOST,
+    port: Number(process.env.DATABASE_PORT),
+    username: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
     entities: [
         User, Upload, UserAddress,
         Message, Notification, OtpCode,
