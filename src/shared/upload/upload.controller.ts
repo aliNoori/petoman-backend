@@ -117,52 +117,6 @@ export class UploadController {
         return {success: true, videoId: id};
     }
 
-
-    /*@Post('video-merge')
-    async mergeChunks(@Body('videoId') videoId: string) {
-        const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
-        const chunkDir = join(BASE_UPLOAD_PATH, 'chunks');
-        const finalPath = join(BASE_UPLOAD_PATH, 'videos', `${videoId}.mp4`);
-
-        const chunkFiles = fs.readdirSync(chunkDir)
-            //.filter(f => f.startsWith(videoId))
-            .sort((a, b) => parseInt(a.split('-')[1]) - parseInt(b.split('-')[1]));
-
-        return new Promise((resolve, reject) => {
-            const writeStream = fs.createWriteStream(finalPath);
-
-            writeStream.on('error', reject);
-            writeStream.on('close', () => {
-                // پاکسازی chunkها
-                for (const chunkFile of chunkFiles) {
-                    const chunkPath = join(chunkDir, chunkFile);
-                    try {
-                        fs.unlinkSync(chunkPath);
-                    } catch (err) {
-                        console.error('خطا در حذف chunk:', err);
-                    }
-                }
-                //resolve({ url: `${baseUrl}/uploads/videos/${videoId}.mp4` });
-            });
-
-
-
-            const appendNext = (index: number) => {
-                if (index >= chunkFiles.length) {
-                    writeStream.end();
-                    return;
-                }
-                const chunkPath = join(chunkDir, chunkFiles[index]);
-                const readStream = fs.createReadStream(chunkPath);
-                readStream.pipe(writeStream, { end: false });
-                readStream.on('end', () => appendNext(index + 1));
-                readStream.on('error', reject);
-            };
-
-            appendNext(0);
-        });
-    }*/
-
     @Post('video-merge')
     async mergeChunks(@Body('videoId') videoId: string) {
         const baseUrl = process.env.BASE_URL || 'http://localhost:3000';
@@ -170,42 +124,74 @@ export class UploadController {
         const videoDir = join(BASE_UPLOAD_PATH, 'videos');
         const tempPath = join(videoDir, `${videoId}-raw.mp4`);
         const finalPath = join(videoDir, `${videoId}.mp4`);
-
+        console.log(fs.readdirSync(chunkDir));
         const chunkFiles = fs.readdirSync(chunkDir)
             .filter(f => f.startsWith(videoId))
-            .sort((a, b) => parseInt(a.split('-')[1]) - parseInt(b.split('-')[1]));
+            .sort((a, b) => {
+                const ai = Number(a.match(/-(\d+)\.mp4$/)?.[1] ?? -1);
+                const bi = Number(b.match(/-(\d+)\.mp4$/)?.[1] ?? -1);
+                return ai - bi;
+            })
 
         if (chunkFiles.length === 0) {
             throw new Error('هیچ چانکی پیدا نشد');
         }
 
-        // چسباندن باینری همه chunkها
+        for (const f of chunkFiles) {
+            console.log(
+                f,
+                f.split('-'),
+                parseInt(f.split('-')[1])
+            );
+        }
+
+        // نوشتن chunk ها
         const writeStream = fs.createWriteStream(tempPath);
+
         for (const f of chunkFiles) {
             const chunkPath = join(chunkDir, f);
             const data = fs.readFileSync(chunkPath);
             writeStream.write(data);
             fs.unlinkSync(chunkPath);
         }
-        writeStream.end();
 
+         // منتظر بمان تا فایل کامل نوشته شود
+        await new Promise<void>((resolve, reject) => {
+            writeStream.once("finish", () => {
+                console.log("WRITE FINISHED");
+                resolve();
+            });
+
+            writeStream.once("error", reject);
+
+            writeStream.end();
+        });
+
+         // حالا تازه ffmpeg
         return new Promise((resolve, reject) => {
-            // اجرای ffmpeg روی فایل نهایی برای ساخت moov atom
-            const cmd = `ffmpeg -i "${tempPath}" -c copy -movflags faststart "${finalPath}"`;
+
+            const cmd =
+                `ffmpeg -i "${tempPath}" -c copy -movflags faststart "${finalPath}"`;
+
             exec(cmd, (err) => {
+
                 if (err) {
-                    console.error('ffmpeg merge error:', err);
+                    console.error(err);
                     return reject(err);
                 }
+
                 fs.unlinkSync(tempPath);
-                resolve({ url: `${baseUrl}/uploads/videos/${videoId}.mp4` });
+
+                resolve({
+                    url: `${baseUrl}/uploads/videos/${videoId}.mp4`
+                });
+
             });
+
         });
     }
 
-
-
-// 📄 فایل عمومی (pdf, docx, zip و ...)
+     // 📄 فایل عمومی (pdf, docx, zip و ...)
     @Post('file')
     @UseInterceptors(
         FileInterceptor('file', {

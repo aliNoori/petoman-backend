@@ -20,7 +20,7 @@ export class CategoryTypeService {
             ...dto,
             isActive: dto.isActive ?? true,
         });
-        return this.repo.save(type);
+        return await this.repo.save(type);
     }
 
     async update(id: string, dto: UpdateCategoryTypeDto) {
@@ -28,16 +28,16 @@ export class CategoryTypeService {
         if (!type) throw new NotFoundException('نوع دسته‌بندی پیدا نشد');
 
         Object.assign(type, dto);
-        return this.repo.save(type);
+        return await this.repo.save(type);
     }
 
 
     async findAll() {
-        return this.repo.find({ where: { isActive: true } });
+        return await this.repo.find({ where: { isActive: true } });
     }
 
     async findByName(name:string) {
-        return this.repo.findOne({ where: { isActive: true, name } });
+        return await this.repo.findOne({ where: { isActive: true, name } });
     }
 
     async remove(id: string) {

@@ -17,25 +17,25 @@ export class DonationController {
     constructor(private readonly donationService: DonationService) {}
 
     @Post()
-    create(@Body() body,@CurrentUser() user: User) {
-        return this.donationService.create(body,user);
+    async create(@Body() body, @CurrentUser() user: User) {
+        return await this.donationService.create(body, user);
     }
     @Patch(':id')
-    update(@Param('id') id: string, @Body() body: Partial<CreateDonationDto>) {
-        return this.donationService.update(id, body)
+    async update(@Param('id') id: string, @Body() body: Partial<CreateDonationDto>) {
+        return await this.donationService.update(id, body)
     }
 
     @Get()
-    findAll() {
-        return this.donationService.findAll();
+    async findAll() {
+        return await this.donationService.findAll();
     }
 
     @Get(':id')
-    findOne(@Param('id') id: string) {
-        return this.donationService.findOne(id);
+    async findOne(@Param('id') id: string) {
+        return await this.donationService.findOne(id);
     }
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.donationService.remove(id)
+    async remove(@Param('id') id: string) {
+        return await this.donationService.remove(id)
     }
 }

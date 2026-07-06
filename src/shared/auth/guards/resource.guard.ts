@@ -24,7 +24,7 @@ export class ResourceGuard implements CanActivate {
         if (!user) throw new ForbiddenException('User not authenticated.');
 
         const permission = this.rolesBuilder
-            .can(user.roles)
+            .can(user.legacyRoles)
             [`${action}${possession}`](resource);
 
         if (!permission.granted) {

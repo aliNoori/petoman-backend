@@ -67,9 +67,13 @@ export class ChatGateway {
             this.connectedUsers.set(userId, client.id);
 
             // Update user online status in DB
-            await this.userService.setOnlineStatus(userId, true);
-            console.log(`🟢 کاربر ${userId} آنلاین شد`);
-            await this.userService.setTenantOnlineStatus(userId, true);
+            if(userId){
+                await this.userService.setOnlineStatus(userId, true);
+                console.log(`🟢 کاربر ${userId} آنلاین شد`);
+                await this.userService.setTenantOnlineStatus(userId, true);
+            }
+
+
             // --- ارسال لیست کامل آنلاین‌ها به کاربر تازه وارد ---
             const onlineUsersList = Array.from(this.connectedUsers.keys()).map(uid => ({
                 userId: uid,
@@ -426,9 +430,12 @@ export class ChatGateway {
         this.connectedUsers.delete(userId);
 
         // آپدیت وضعیت در دیتابیس
-        await this.userService.setOnlineStatus(userId, false);
-        console.log(`🔴 کاربر ${userId} آفلاین شد`);
-        await this.userService.setTenantOnlineStatus(userId, false);
+        if(userId){
+            await this.userService.setOnlineStatus(userId, false);
+            console.log(`🔴 کاربر ${userId} آفلاین شد`);
+            await this.userService.setTenantOnlineStatus(userId, false);
+        }
+
 
         // اگر کاربر در اتاقی بود، به بقیه اطلاع دهد
         if (consultationId) {

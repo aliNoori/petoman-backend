@@ -51,7 +51,7 @@ export class DonationService {
             panelType:'hamian'
         });
 
-        return this.donationRepo.save(donation);
+        return await this.donationRepo.save(donation);
     }
 
     async update(id: string, dto: Partial<CreateDonationDto>): Promise<Donation> {
@@ -90,11 +90,11 @@ export class DonationService {
             time: dto.time ?? donation.time
         })
 
-        return this.donationRepo.save(donation)
+        return await this.donationRepo.save(donation)
     }
 
-    findAll() {
-        return this.donationRepo.find({ relations: ['supporter','supporter.user', 'kindnessMeeting'] });
+    async findAll() {
+        return await this.donationRepo.find({relations: ['supporter', 'supporter.user', 'kindnessMeeting']});
     }
     async findOne(id: string): Promise<Donation> {
         const donation = await this.donationRepo.findOne({ where: { id } as any, relations: ['supporter', 'kindnessMeeting'] })

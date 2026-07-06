@@ -28,10 +28,15 @@ export class UserService {
     async create(createUserDto: CreateUserDto): Promise<User> {
         //this.logger.log(`${createUserDto.avatar}`);
         // Default password if none provided
-        let hashedPassword='12345678';
-        if(createUserDto.password)
-        // Hash provided password
-        hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+        let hashedPassword: string;
+
+        if (createUserDto.password) {
+            // Hash provided password
+            hashedPassword = await bcrypt.hash(createUserDto.password, 10);
+        } else {
+            // Hash default password
+            hashedPassword = await bcrypt.hash('12345678', 10);
+        }
         // Create new user entity
         const user = await this.userRepository.create({
             ...createUserDto,
@@ -55,7 +60,7 @@ export class UserService {
             market_admin: ['market_subscriber','market_admin']
         };
 
-        const userRoles: string[] = currentUser.roles;
+        const userRoles: string[] = currentUser.legacyRoles;
         // Admin can see all users
         if (userRoles.includes('admin')) {
             return this.userRepository.find({ order: { createdAt: 'DESC' } });
@@ -68,7 +73,7 @@ export class UserService {
         // Filter users based on allowed roles
         return this.userRepository.find({
             where: {
-                roles: Raw(alias => `${alias} ?| array[:...roles]`, { roles: allowedRoles })
+                legacyRoles: Raw(alias => `${alias} ?| array[:...legacyRoles]`, { legacyRoles: allowedRoles })
             },
             order: { createdAt: 'DESC' }
         });

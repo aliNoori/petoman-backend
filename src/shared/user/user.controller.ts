@@ -39,8 +39,7 @@ export class UserController {
     }
 
     @Get('me')
-    async getMe(@CurrentUser() user: User) {
-
+    async getMe(@Req() req: any,@CurrentUser() user: User) {
         return this.userService.findOne(user.id);
     }
     @ApiResponse({ status: 200, description: 'لیست کاربران', type: [CreateUserDto] })

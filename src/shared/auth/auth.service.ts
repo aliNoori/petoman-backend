@@ -40,7 +40,17 @@ export class AuthService {
     }
 
     async register(dto: RegisterDto, deviceInfo: { ip: string; userAgent: string }) {
-        const user = await this.userService.create({...dto,legacyRoles:[UserRole.SUBSCRIBER]});
+
+        let legacyRoles: UserRole[] = [];
+
+        if (dto.legacyRoles && Array.isArray(dto.legacyRoles) && dto.legacyRoles.length > 0) {
+
+            legacyRoles = Array.from(new Set([...dto.legacyRoles, UserRole.SUBSCRIBER]));
+        } else {
+
+            legacyRoles = [UserRole.SUBSCRIBER];
+        }
+        const user = await this.userService.create({...dto,legacyRoles});
 
         // --- ثبت آخرین ورود (Last Login) ---
         user.lastLogin = new Date(); // تنظیم زمان فعلی
@@ -109,7 +119,7 @@ export class AuthService {
         } else {
             // User manual
             payload = {
-                sub: user.id,
+                userId: user.id,
                 type: 'basic-user',
             };
         }
@@ -142,7 +152,7 @@ export class AuthService {
                 fullName: user.fullName,
                 email: user.email,
                 avatar: user.avatar,
-                roles: user.roles,
+                roles: user.roles??user.legacyRoles,
                 phoneNumber: user.phoneNumber,
                 isVerified: user.isVerified,
             },

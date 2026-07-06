@@ -29,49 +29,48 @@ export class KindnessController {
     }
 
     @Post()
-    @UseGuards(JwtAuthGuard,ResourceGuard)
+    @UseGuards(JwtAuthGuard, ResourceGuard)
     @ACL('create', 'supporters')
     @UseInterceptors(FileInterceptor('image', uploadOptions('kindness-meetings')) as any)
-    create(@UploadedFile() file: Express.Multer.File,
-           @Body() dto: CreateKindnessMeetingDto,@CurrentUser() user: User)
-    {
-        return this.kindnessService.create(dto,user, file);
+    async create(@UploadedFile() file: Express.Multer.File,
+                 @Body() dto: CreateKindnessMeetingDto, @CurrentUser() user: User) {
+        return await this.kindnessService.create(dto, user, file);
     }
 
     @Get()
-    findAll() {
-        return this.kindnessService.findAll();
+    async findAll() {
+        return await this.kindnessService.findAll();
     }
 
     @Get(':id/registrations')
-    findAllRegistrations(@Param('id') id: string) {
-        return this.kindnessService.findAllRegistrations(id);
+    async findAllRegistrations(@Param('id') id: string) {
+        return await this.kindnessService.findAllRegistrations(id);
     }
 
     @Get(':id')
-    findOne(@Param('id', ParseUUIDPipe) id: string) {
-        return this.kindnessService.findOne(id);
+    async findOne(@Param('id', ParseUUIDPipe) id: string) {
+        return await this.kindnessService.findOne(id);
     }
 
     @Patch(':id')
-    @UseGuards(JwtAuthGuard,ResourceGuard)
+    @UseGuards(JwtAuthGuard, ResourceGuard)
     @ACL('create', 'supporters')
     @UseInterceptors(FileInterceptor('image', uploadOptions('kindness-meetings')) as any)
-    update(
+    async update(
         @Param('id', ParseUUIDPipe) id: string,
         @UploadedFile() file: Express.Multer.File,
         @Body() dto: UpdateKindnessMeetingDto
     ) {
-        return this.kindnessService.update(id, dto, file)
+        return await this.kindnessService.update(id, dto, file)
     }
     @Patch(':id/status')
-    @UseGuards(JwtAuthGuard,ResourceGuard)
+    @UseGuards(JwtAuthGuard, ResourceGuard)
     @ACL('create', 'supporters')
-    updateStatus(
+    async updateStatus(
         @Param('id', ParseUUIDPipe) id: string,
         @Body('status') status: KindnessStatus
     ) {
-        return this.kindnessService.toggleStatus(id, status)
+        return await this.kindnessService.toggleStatus(id, status)
     }
 
 

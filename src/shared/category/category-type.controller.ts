@@ -8,27 +8,27 @@ export class CategoryTypeController {
     constructor(private readonly service: CategoryTypeService) {}
 
     @Get()
-    findAll() {
-        return this.service.findAll();
+    async findAll() {
+        return await this.service.findAll();
     }
 
     @Get(':name')
     async findByName(@Param('name') name: string) {
-        return this.service.findByName(name);
+        return await this.service.findByName(name);
     }
 
     @Post()
-    create(@Body() dto: CreateCategoryTypeDto) {
-        return this.service.create(dto);
+    async create(@Body() dto: CreateCategoryTypeDto) {
+        return await this.service.create(dto);
     }
 
     @Put(':id')
-    update(@Param('id') id: string, @Body() dto: UpdateCategoryTypeDto) {
-        return this.service.update(id, dto);
+    async update(@Param('id') id: string, @Body() dto: UpdateCategoryTypeDto) {
+        return await this.service.update(id, dto);
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.service.remove(id);
+    async remove(@Param('id') id: string) {
+        return await this.service.remove(id);
     }
 }

@@ -40,7 +40,7 @@ export class KindnessService {
             color:'bg-green-100',
             panelType:'hamian'
         });
-        return this.kindnessRepo.save(meeting)
+        return await this.kindnessRepo.save(meeting)
     }
 
 
@@ -85,7 +85,7 @@ export class KindnessService {
         const updated = this.mapDtoToEntity(dto,file)
         Object.assign(meeting, updated)
 
-        return this.kindnessRepo.save(meeting)
+        return await this.kindnessRepo.save(meeting)
     }
 
     async remove(id: string) {
@@ -111,7 +111,7 @@ export class KindnessService {
         }
 
         // بعد خود meeting رو پاک کن
-        return this.kindnessRepo.remove(meeting)
+        return await this.kindnessRepo.remove(meeting)
     }
 
     async toggleStatus(id: string, status: KindnessStatus) {
@@ -119,7 +119,7 @@ export class KindnessService {
         if (!meeting) throw new NotFoundException('قرار مهربانی پیدا نشد')
 
         meeting.status = status
-        return this.kindnessRepo.save(meeting)
+        return await this.kindnessRepo.save(meeting)
     }
 
     private mapDtoToEntity(
