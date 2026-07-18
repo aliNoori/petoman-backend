@@ -32,88 +32,32 @@ export class DocumentaryController {
     constructor(private readonly documentaryService: DocumentaryService) {}
 
     @Post()
-    @UseGuards(JwtAuthGuard,ResourceGuard)
+    @UseGuards(JwtAuthGuard, ResourceGuard)
     @ACL('create', 'supporters')
-    @UseInterceptors(FileFieldsInterceptor([
-        { name: 'videoFile', maxCount: 1 },
-        { name: 'thumbnailPreview', maxCount: 1 }
-    ], uploadOptions('documentaries')) as any)
-    create(
+    async create(
         @Body() dto: CreateDocumentaryDto,
-        @UploadedFiles() files: {
-            videoFile?: Express.Multer.File[],
-            thumbnailPreview?: Express.Multer.File[]
-        }
     ) {
-        const baseUrl = `${process.env.BASE_URL || 'http://localhost:3000'}/uploads/documentaries`;
-
-        if (files.videoFile?.[0]) {
-            if (files.videoFile) {
-                dto.videoFile = `${baseUrl}/${files.videoFile[0].filename}`;
-            }
-        }
-
-        if (files.thumbnailPreview?.[0]) {
-            if (files.thumbnailPreview) {
-                dto.thumbnailPreview = `${baseUrl}/${files.thumbnailPreview[0].filename}`;
-            }
-        }
-
-        return this.documentaryService.create(dto)
+        return await this.documentaryService.create(dto)
     }
 
     @Get()
-    findAll() {
-        return this.documentaryService.findAll();
+    async findAll() {
+        return await this.documentaryService.findAll();
     }
 
     @Get(':id')
-    findOne(@Param('id', ParseUUIDPipe) id: string) {
-        return this.documentaryService.findOne(id);
+    async findOne(@Param('id', ParseUUIDPipe) id: string) {
+        return await this.documentaryService.findOne(id);
     }
 
     @Patch(':id')
-    @UseGuards(JwtAuthGuard,ResourceGuard)
-    @ACL('create', 'supporters')
-    @UseInterceptors(FileFieldsInterceptor([
-        { name: 'videoFile', maxCount: 1 },
-        { name: 'thumbnailPreview', maxCount: 1 }
-    ], uploadOptions('documentaries')) as any)
+    @UseGuards(JwtAuthGuard, ResourceGuard)
+    @ACL('update', 'supporters')
     async update(
         @Param('id', ParseUUIDPipe) id: string,
         @Body() dto: UpdateDocumentaryDto,
-        @UploadedFiles() files: {
-            videoFile?: Express.Multer.File[]
-            thumbnailPreview?: Express.Multer.File[]
-        }
     ) {
-        const baseUrl = `${process.env.BASE_URL || 'http://localhost:3000'}/uploads/documentaries`;
-
-        // 🎞️ اگر فایل ویدیو جدید آپلود شده
-        if (files.videoFile?.[0]) {
-            // فایل قبلی را حذف کن
-            await this.documentaryService.deleteOldFile(id, 'videoFile');
-            // فایل جدید را تنظیم کن
-            if (files.videoFile) {
-                dto.videoFile = `${baseUrl}/${files.videoFile[0].filename}`;
-            }
-
-            dto.videoUrl = undefined;
-        }
-
-        if (files.thumbnailPreview?.[0]) {
-            await this.documentaryService.deleteOldFile(id, 'thumbnailPreview');
-            if (files.thumbnailPreview) {
-                dto.thumbnailPreview = `${baseUrl}/${files.thumbnailPreview[0].filename}`;
-            }
-        }
-
-        // اگر ویدیو به‌صورت URL ارسال شد، باید فایل قبلی حذف بشود
-        if (dto.videoUrl && !files.videoFile?.[0]) {
-            await this.documentaryService.deleteOldFile(id, 'videoFile');
-        }
-
-        return this.documentaryService.update(id, dto);
+        return this.documentaryService.update(id, dto)
     }
 
     @Delete(':id')
@@ -144,6 +88,6 @@ export class DocumentaryController {
         }
 
         // حذف رکورد از دیتابیس
-        return this.documentaryService.removeById(id);
+        return await this.documentaryService.removeById(id);
     }
 }

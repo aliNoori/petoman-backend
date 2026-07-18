@@ -48,4 +48,11 @@ export class AdminSettingsService {
             }
         }
     }
+
+    async findShippingMethods(): Promise<AdminSetting | undefined> {
+        const settings = await this.settingRepository.find();
+
+        // استخراج فقط بخش shipping
+        return settings.find((item) => item.key === 'shipping');
+    }
 }

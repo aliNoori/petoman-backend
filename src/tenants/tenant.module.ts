@@ -9,9 +9,10 @@ import {Tenant} from "../core/entities/tenant.entity";
 import {ActivitiesLogModule} from "../shared/activities/activities-log.module";
 import {JwtModule} from "@nestjs/jwt";
 import {SessionModule} from "../shared/user/session.module";
+import {AdminSettingModule} from "../shared/settings/admin-settings-module";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Tenant]),ActivitiesLogModule,JwtModule,SessionModule],
+    imports: [TypeOrmModule.forFeature([Tenant]),ActivitiesLogModule,JwtModule,SessionModule,AdminSettingModule],
     controllers:[TenantController],
     providers: [TenantProvisioningService,TenantMembershipService,TenantContext,TenantService],
     exports: [TenantContext,TenantProvisioningService,TenantMembershipService,TenantService],

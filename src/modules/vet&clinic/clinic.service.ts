@@ -164,15 +164,20 @@ export class VetClinicService {
             // استفاده از Set برای جلوگیری از تکرار
             const specialityIds = new Set<string>();
 
-            settings.forEach((setting) => {
+            for (const setting of settings) {
                 // بررسی ایمن برای وجود value و specialty
                 if (setting.value && typeof setting.value === 'object' && 'specialty' in setting.value) {
-                    const specialtyId = setting.value.specialty;
-                    if (specialtyId) {
-                        specialityIds.add(specialtyId);
+
+                    const speciality = await this.specialityRepo.findOne({
+                        where: {value: setting.value.specialty},
+                        select: ['label'] // فقط نام را بیاور تا سریع‌تر باشد
+                    });
+
+                    if (speciality) {
+                        specialityIds.add(speciality.id);
                     }
                 }
-            });
+            }
 
             // 3. دریافت نام تمام تخصص‌ها به صورت یک کوئری (Batch Loading)
             // این کار از انجام کوئری‌های متعدد درون حلقه جلوگیری می‌کند (N+1 Problem)

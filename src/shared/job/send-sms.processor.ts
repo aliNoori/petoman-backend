@@ -24,7 +24,7 @@ export class SendSmsProcessor {
         this.logger.log(`Processing request for user: ${phoneNumber}`);
 
         // ۲. ارسال پیامک
-        //await this.smsService.send(phoneNumber,message);//TODO:disable for test
+        await this.smsService.send(phoneNumber,message);
 
         this.logger.log(`Notification and SMS sent for user: ${phoneNumber}`);
 
