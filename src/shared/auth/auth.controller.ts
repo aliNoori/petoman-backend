@@ -126,9 +126,8 @@ export class AuthController {
 
         const userId = result.user.id;
 
-        // 2. Check if user is trying to log in as a Tenant (via Shop ID)
+        // 2. Explicit shop selection (multi-tenant user picked a shop already)
         if (shopId) {
-            // Use 'await' and proper relations
             const tenantUser = await this.tenantUserRepo.findOne({
                 where: {shopId, userId},
                 relations: ['tenant'] // Load tenant relation to access 'type'
@@ -145,8 +144,36 @@ export class AuthController {
             throw new UnauthorizedException(await this.i18n.t('error.forbidden'));
         }
 
-        // 3. Check if user is a Main Admin (Super Admin)
-        // Fetch user with role relation
+        // 3. Auto-detect: find every shop this phone number manages
+        const tenantUsers = await this.tenantUserRepo.find({
+            where: {userId, status: 'active'},
+            relations: ['tenant']
+        });
+
+        if (tenantUsers.length === 1) {
+            const [tenantUser] = tenantUsers;
+            return {
+                ...result,
+                tenantId: tenantUser.tenantId,
+                adminPanelType: tenantUser.tenant.type
+            };
+        }
+
+        if (tenantUsers.length > 1) {
+            // Same phone manages multiple shops - let the client ask which one
+            return {
+                ...result,
+                needsShopSelection: true,
+                shops: tenantUsers.map((tu) => ({
+                    shopId: tu.shopId,
+                    tenantId: tu.tenantId,
+                    name: tu.tenant.name,
+                    type: tu.tenant.type
+                }))
+            };
+        }
+
+        // 4. No tenant link found - check Main Admin (Super Admin)
         const userWithRole = await this.userRepo.findOne({
             where: {id: userId},
             relations: ['roles'] // لود کردن لیست نقش‌ها
@@ -162,6 +189,27 @@ export class AuthController {
 
         // If neither a valid Tenant nor a Main Admin
         throw new ForbiddenException(await this.i18n.t('error.forbidden'));
+    }
+
+    // انتخاب فروشگاه توسط کاربری که به چند فروشگاه لینک است (بعد از ورود موفق)
+    @Post('select-tenant')
+    @UseGuards(JwtAuthGuard, BlacklistGuard)
+    async selectTenant(@CurrentUser() user: User, @Body('shopId') shopId: string) {
+        if (!shopId) throw new BadRequestException('شناسه فروشگاه الزامی است');
+
+        const tenantUser = await this.tenantUserRepo.findOne({
+            where: {shopId, userId: user.id, status: 'active'},
+            relations: ['tenant']
+        });
+
+        if (!tenantUser) {
+            throw new ForbiddenException(await this.i18n.t('error.forbidden'));
+        }
+
+        return {
+            tenantId: tenantUser.tenantId,
+            adminPanelType: tenantUser.tenant.type
+        };
     }
 
     // رفرش توکن

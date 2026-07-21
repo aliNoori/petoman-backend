@@ -1,69 +1,62 @@
-# syntax=docker/dockerfile:1.7
+# =====================================================
+# Stage 1 - Base
+# =====================================================
+FROM node:22-alpine AS base
 
-###############################################
-# Base Image
-###############################################
-FROM node:22-bookworm-slim AS base
+#ENV NODE_ENV=production
+
 
 WORKDIR /app
 
-###############################################
-# Dependencies
-###############################################
+RUN apk add --no-cache libc6-compat
+
+# =====================================================
+# Stage 2 - Dependencies
+# =====================================================
 FROM base AS deps
 
 COPY package*.json ./
 
-RUN --mount=type=cache,target=/root/.npm \
-    npm ci
-
-###############################################
-# Builder
-###############################################
+#RUN npm ci
+RUN npm ci --include=dev
+# =====================================================
+# Stage 3 - Builder
+# =====================================================
 FROM deps AS builder
 
 COPY . .
 
 RUN npm run build
 
-###############################################
-# Production Dependencies
-###############################################
-FROM base AS production-deps
+# ÍÐÝ devDependencies
+RUN npm prune --omit=dev
 
-COPY package*.json ./
+# =====================================================
+# Stage 4 - Runner
+# =====================================================
+FROM node:22-alpine
 
-RUN --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev
+ENV NODE_ENV=development
 
-###############################################
-# Runner
-###############################################
-FROM node:22-bookworm-slim AS runner
-
-ENV NODE_ENV=production
+RUN apk add --no-cache ffmpeg
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    tini \
-    curl \
- && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache libc6-compat
 
-COPY --from=production-deps /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/package*.json ./
+COPY --from=builder --chown=node:node /app/package*.json ./
+COPY --from=builder --chown=node:node /app/node_modules ./node_modules
+COPY --from=builder --chown=node:node /app/dist ./dist
+COPY --from=builder /app/i18n ./i18n
 
-RUN mkdir -p uploads
+RUN mkdir -p /app/uploads && \
+    chown node:node /app/uploads
 
-RUN groupadd -r nodejs && \
-    useradd -r -g nodejs nestjs && \
-    chown -R nestjs:nodejs /app
-
-USER nestjs
+USER node
 
 EXPOSE 3000
 
-ENTRYPOINT ["/usr/bin/tini","--"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+CMD node -e "require('http').get('http://127.0.0.1:3000/api/health',res=>process.exit(res.statusCode<500?0:1)).on('error',()=>process.exit(1))"
 
 CMD ["node","dist/main.js"]
